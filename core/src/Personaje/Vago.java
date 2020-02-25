@@ -1,6 +1,7 @@
 package Personaje;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -23,10 +24,10 @@ public class Vago {
     private FixtureDef propiedadesFisicasCuerpo;
     public Vago(World m){
         mundo=m;
-        sprite=new Sprite(new Texture("Personajes/orco/orc_walk.gif"));
+        sprite=new Sprite(new Texture("gothic/PNG/sprites/bearded-idle/bearded-idle-1.png"));
         int anchuraSprite=1; //Anchura y altura se expresan ahora en metros
         int alturaSprite=1;//Anchura y altura se expresan ahora en metros
-        sprite.setBounds(3,8,
+        sprite.setBounds(5,27,
                 anchuraSprite,alturaSprite); //La posición inicial también debe estar en metros
 
         this.propiedadesCuerpo= new BodyDef(); //Establecemos las propiedades del cuerpo
@@ -48,11 +49,31 @@ public class Vago {
     }
 
 
+    public float getX(){
+        return this.cuerpo.getPosition().x;
+    }
+
+
+    public float getY(){
+        return this.cuerpo.getPosition().y;
+    }
+
+    public Body getCuerpo(){
+        return cuerpo;
+    }
+
+
+
     public void draw(SpriteBatch batch, float parentAlpha) {
         //Esta cuenta hace falta por lo de la media altura. Ese absurdo cálculo...
         sprite.setPosition(cuerpo.getPosition().x-sprite.getWidth()/2,cuerpo.getPosition().y-sprite.getHeight()/2);
         //Sprite quiere la rotación en grados, el cuerpo la da en radianes. Esta constante convierte de uno a otro.
         sprite.setRotation(MathUtils.radiansToDegrees*cuerpo.getAngle());
         sprite.draw(batch);
+    }
+
+    public void seguir(OrthographicCamera camara){
+        camara.position.x=this.cuerpo.getPosition().x;
+        camara.position.y=this.cuerpo.getPosition().y;
     }
 }

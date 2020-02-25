@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
+import basedatos.BaseDeDatosAndroid;
 import slayer.simulator.game.SlakerSimulator;
 
 public class AndroidLauncher extends AndroidApplication {
@@ -11,6 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new SlakerSimulator(), config);
+		initialize(new SlakerSimulator(new BaseDeDatosAndroid(this),true), config);
 	}
 }
