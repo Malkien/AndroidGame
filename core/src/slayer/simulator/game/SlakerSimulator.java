@@ -27,6 +27,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.lang.reflect.Array;
+
+import Personaje.Objeto;
 import Personaje.Vago;
 import basededatos.BaseDeDatos;
 import constantes.Constantes;
@@ -38,6 +41,9 @@ public class SlakerSimulator extends ApplicationAdapter {
 	private static final float pixelsPorCuadro=32f;
 	private OrthogonalTiledMapRenderer renderer;
 	private Vago vago;
+	private Objeto objetoNinja;
+	private Objeto objetoEspada;
+	private Objeto objetoAnillo;
 	private Teclado teclado;
 	private Box2DDebugRenderer debugRenderer;
 	private SpriteBatch batch;
@@ -45,11 +51,12 @@ public class SlakerSimulator extends ApplicationAdapter {
 	private Body paredFinal;
 	BaseDeDatos baseDeDatos;
 	private boolean esAndroid;
+	private Body lagoAgua;
 
 	public SlakerSimulator(BaseDeDatos bd, boolean android){
 		baseDeDatos=bd;
 		this.esAndroid=android;
-		Constantes.init(this.esAndroid);
+		Constantes.init();
 	}
 
 
@@ -60,6 +67,9 @@ public class SlakerSimulator extends ApplicationAdapter {
 		world=new World(new Vector2(0,-9.8f),true);
 
 		vago=new Vago(world);
+		objetoNinja = new Objeto(world,new Texture("espada.png"),"ninja", 1,27.5f);
+		objetoEspada = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"espada", 5,27.5f);
+		objetoAnillo = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"anillo", 35,36.5f);
 
 		camara=new OrthographicCamera(10,10);
 		this.debugRenderer=new Box2DDebugRenderer();
@@ -84,7 +94,15 @@ public class SlakerSimulator extends ApplicationAdapter {
 				paredFinal=rectanguloSuelo;
 			}
 		}
-		teclado=new Teclado(vago);
+		BodyDef lago= new BodyDef(); //Establecemos las propiedades del cuerpo
+		lago.position.set(new Vector2(70, 25.01f));
+		lago.type = BodyDef.BodyType.StaticBody;
+		lagoAgua = world.createBody(lago);
+		PolygonShape lagoPoligono = new PolygonShape();
+		lagoPoligono.setAsBox(15,1);
+		lagoAgua.createFixture(lagoPoligono,0.0f);
+		lagoPoligono.dispose();
+		teclado=new Teclado(vago, new Objeto[]{objetoNinja,objetoAnillo,objetoEspada} );
 		Gdx.input.setInputProcessor(teclado);
 	}
 
@@ -99,6 +117,9 @@ public class SlakerSimulator extends ApplicationAdapter {
 		batch.setProjectionMatrix(camara.combined);
 		batch.begin();
 		vago.draw(batch,0);
+		objetoNinja.draw(batch,0);
+		objetoEspada.draw(batch,0);
+		objetoAnillo.draw(batch,0);
 		batch.end();
 
 		camara.update();

@@ -3,8 +3,14 @@ package input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
+import javax.jws.Oneway;
+
+import Personaje.Objeto;
 import Personaje.Vago;
 import constantes.Constantes;
 
@@ -13,10 +19,12 @@ import constantes.Constantes;
  */
 
 public class Teclado implements InputProcessor {
-    Vago actor;
+    private Vago actor;
+    private Objeto[] objetos;
 
-    public Teclado(Vago j){
+    public Teclado(Vago j, Objeto[] objetos){
         this.actor=j;
+        this.objetos = objetos;
     }
 
 
@@ -33,8 +41,9 @@ public class Teclado implements InputProcessor {
             case Input.Keys.UP:
                 actor.getCuerpo().applyForceToCenter(0,250,true);
                 break;
-    }
-        Gdx.app.log("Qeeeeee","X "+Constantes.fuerzaLanzamientoX+" Y "+Constantes.fuerzaLanzamientoY);
+        }
+        checkCollision(actor, objetos);
+
         return true;
     }
 
@@ -50,16 +59,26 @@ public class Teclado implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(screenX>Gdx.graphics.getWidth()/2){
-            actor.getCuerpo().applyForceToCenter(Constantes.fuerzaLanzamientoX*-1,Constantes.fuerzaLanzamientoY,true);
-        }else{
+        if(screenY<Gdx.graphics.getHeight()/3) {
+            actor.getCuerpo().applyForceToCenter(0, 850, true);
+        }else if(screenX>Gdx.graphics.getWidth()/2){
             actor.getCuerpo().applyForceToCenter(Constantes.fuerzaLanzamientoX,Constantes.fuerzaLanzamientoY,true);
+        }else{
+            actor.getCuerpo().applyForceToCenter(Constantes.fuerzaLanzamientoX*-1,Constantes.fuerzaLanzamientoY,true);
         }
+
+        checkCollision(actor, objetos);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(screenY>Gdx.graphics.getHeight()/3) {
+            actor.getCuerpo().setLinearVelocity(1f,0);
+        }
+
+
+        checkCollision(actor, objetos);
         return false;
     }
 
@@ -78,4 +97,17 @@ public class Teclado implements InputProcessor {
         return false;
     }
 
+    public static void checkCollision(Vago principal, Objeto objeto) {
+        if(Intersector.overlaps(principal.getSprite().getBoundingRectangle(), objeto.getSprite().getBoundingRectangle())){
+            principal.addObjeto(objeto.getPalabra());
+            objeto.setMostrar(false);
+        }
+
+    }
+
+    public static void checkCollision(Vago principal, Objeto[] objetos) {
+        for(Objeto spriteGroup : objetos) {
+            checkCollision(principal, spriteGroup);
+        }
+    }
 }
