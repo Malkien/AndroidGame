@@ -14,5 +14,6 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new SlakerSimulator(new BaseDeDatosAndroid(this),true), config);
+
 	}
 }

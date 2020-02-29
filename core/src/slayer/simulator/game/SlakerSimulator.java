@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
@@ -60,10 +61,12 @@ public class SlakerSimulator extends ApplicationAdapter {
 	private boolean esAndroid;
 	private Body lagoAgua;
 	private ArrayList<Body> suelos;
-	private boolean tocado;
+	private SpriteBatch batchTexto;
+	private BitmapFont textoPantalla;
 
 	public SlakerSimulator(BaseDeDatos bd, boolean android){
 		baseDeDatos=bd;
+
 		this.esAndroid=android;
 		Constantes.init();
 	}
@@ -73,6 +76,12 @@ public class SlakerSimulator extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch=new SpriteBatch();
+		/////////////////////////////////////
+		batchTexto = new SpriteBatch();
+		textoPantalla = new BitmapFont();
+		///////////////////////////////////
+		baseDeDatos.completar("");
+		////////////////////////////////
 		world=new World(new Vector2(0,-9.8f),true);
 		suelos = new ArrayList<Body>();
 
@@ -141,6 +150,11 @@ public class SlakerSimulator extends ApplicationAdapter {
 		objetoNinja.draw(batch,0);
 		objetoEspada.draw(batch,0);
 		objetoAnillo.draw(batch,0);
+
+		batchTexto.begin();
+		textoPantalla.draw(batch,"PRUEBAAAAAAA",100,Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth(),1,false);
+		batchTexto.end();
+
 		batch.end();
 
 		camara.update();

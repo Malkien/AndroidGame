@@ -5,13 +5,22 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.badlogic.gdx.math.Interpolation;
+
+import java.util.ArrayList;
+
 import basededatos.BaseDeDatos;
+
+import static basedatos.BDOpenHelper.DATO_COMPLETADO;
+import static basedatos.BDOpenHelper.DATO_NOMBRE;
+import static basedatos.BDOpenHelper.NOMBRE_BBDD;
 
 public class BaseDeDatosAndroid implements BaseDeDatos {
     private BDOpenHelper openHelper;
 
     public BaseDeDatosAndroid(Context c){
         openHelper=new BDOpenHelper(c,1);
+        cargarLogros();
     }
 
     @Override
@@ -29,28 +38,42 @@ public class BaseDeDatosAndroid implements BaseDeDatos {
         }
     }
 
-    @Override
-    public void guardar(int nuevaPuntuacion) {
+    private void cargarLogros(){
         SQLiteDatabase db=openHelper.getWritableDatabase();
-        Cursor c=db.query("polloPuntos",
-                null,null,null,
-                null,null,null);
+        ArrayList<String> nombres = new ArrayList<String>(){{
+            add("Envidia de Indiana Jones");
+            add("Vago Verdadero");
+            add("Ninja Cumpliendo su Cometido");
+            add("Gran Dominador de Mal");
+        }};
 
-        ContentValues cv=new ContentValues();
-        cv.put("puntos",nuevaPuntuacion);
-
-        if(c.moveToFirst()){ //False si no hay ninguna fila, true si hay una
-            //Caso en que ya haya una fila
-            //Siempre voy a tener solo una fila, por tanto, cuando actualizo
-            //puedo dejar whereClause y whereArgs a null. Me va a actualizar
-            //todas las filas, es decir, la única que existe.
-            db.update("polloPuntos",cv,null,
-                    null);
-        }else{
-            //Caso en que la tabla esté vacía
-            db.insert("polloPuntos",null,cv);
+        for(String nombre:nombres){
+            ContentValues valores = new ContentValues();
+            valores.put(DATO_NOMBRE,nombre);
+            db.insert(NOMBRE_BBDD,null,valores);
+        }
+    }
+    @Override
+    public void guardar(String nombre) {
+        SQLiteDatabase db=openHelper.getWritableDatabase();
+        Cursor c = db.rawQuery("SELECT "+DATO_COMPLETADO+" FROM "+NOMBRE_BBDD+" WHERE "+DATO_NOMBRE+"='"+nombre+"'",null);
+        c.moveToFirst();
+        if(c.getInt(1) == 0){
+            ContentValues cv = new ContentValues();
+            cv.put("",1);
+            db.update(NOMBRE_BBDD,cv,DATO_NOMBRE+"="+nombre,null);
         }
         c.close();
         db.close();
     }
+
+    @Override
+    public void completar(String completar) {
+        SQLiteDatabase db=openHelper.getWritableDatabase();
+        Cursor c = db.query(NOMBRE_BBDD,null,null,null,null,null,null);
+        int completado = c.getColumnCount();
+        c = db.rawQuery("SELECT "+DATO_COMPLETADO+" FROM "+NOMBRE_BBDD+" WHERE "+DATO_COMPLETADO+"='"+1+"'",null);
+        float totalCompletado = (completado/c.getColumnCount())*100;
+    }
+
 }

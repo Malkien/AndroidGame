@@ -9,7 +9,13 @@ public class BaseDeDatosEscritorio implements BaseDeDatos {
     }
 
     @Override
-    public void guardar(int nuevaPuntuacion) {
-        //No hago nada, en escritorio esto es mentira.
+    public void guardar(String nombre) {
+
     }
+
+    @Override
+    public void completar(String completar) {
+
+    }
+
 }
