@@ -7,9 +7,8 @@ public class Constantes {
 
     public static void init(){
 
-        fuerzaLanzamientoX=10;
+        fuerzaLanzamientoX=500;
         fuerzaLanzamientoY=0;
-        fuerzaSalto=500;
 
     }
     public static void cambiarVelocidad(int v){fuerzaLanzamientoX = v;}

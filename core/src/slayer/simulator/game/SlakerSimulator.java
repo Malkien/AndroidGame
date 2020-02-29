@@ -15,7 +15,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -23,18 +22,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 import Personaje.Objeto;
 import Personaje.Vago;
@@ -59,8 +52,6 @@ public class SlakerSimulator extends ApplicationAdapter {
 	BaseDeDatos baseDeDatos;
 	private boolean esAndroid;
 	private Body lagoAgua;
-	private ArrayList<Body> suelos;
-	private boolean tocado;
 
 	public SlakerSimulator(BaseDeDatos bd, boolean android){
 		baseDeDatos=bd;
@@ -74,8 +65,17 @@ public class SlakerSimulator extends ApplicationAdapter {
 	public void create () {
 		batch=new SpriteBatch();
 		world=new World(new Vector2(0,-9.8f),true);
-		suelos = new ArrayList<Body>();
 
+		vago=new Vago(world);
+		objetoNinja = new Objeto(world,new Texture("espada.png"),"ninja", 1,27.5f);
+		objetoEspada = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"espada", 5,27.5f);
+		objetoAnillo = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"anillo", 35,36.5f);
+
+		camara=new OrthographicCamera(10,10);
+		this.debugRenderer=new Box2DDebugRenderer();
+
+		camara.position.x = vago.getX();
+		camara.position.y = vago.getY();
 
 		mapa=new TmxMapLoader().load("mapa/map.tmx");
 		renderer = new OrthogonalTiledMapRenderer(mapa, 1/pixelsPorCuadro);
@@ -84,7 +84,6 @@ public class SlakerSimulator extends ApplicationAdapter {
 			BodyDef propiedadesRectangulo= new BodyDef(); //Establecemos las propiedades del cuerpo
 			propiedadesRectangulo.type = BodyDef.BodyType.StaticBody;
 			Body rectanguloSuelo = world.createBody(propiedadesRectangulo);
-			suelos.add(rectanguloSuelo);
 			FixtureDef propiedadesFisicasRectangulo=new FixtureDef();
 			Shape formaRectanguloSuelo=getRectangle((RectangleMapObject)objeto);
 			propiedadesFisicasRectangulo.shape = formaRectanguloSuelo;
@@ -103,23 +102,8 @@ public class SlakerSimulator extends ApplicationAdapter {
 		lagoPoligono.setAsBox(15,1);
 		lagoAgua.createFixture(lagoPoligono,0.0f);
 		lagoPoligono.dispose();
-		suelos.add(lagoAgua);
-
-		vago=new Vago(world, suelos);
-		objetoNinja = new Objeto(world,new Texture("espada.png"),"ninja", 1,27.5f);
-		objetoEspada = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"espada", 5,27.5f);
-		objetoAnillo = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"anillo", 35,36.5f);
-
-		camara=new OrthographicCamera(10,10);
-		this.debugRenderer=new Box2DDebugRenderer();
-
-		camara.position.x = vago.getX();
-		camara.position.y = vago.getY();
-
 		teclado=new Teclado(vago, new Objeto[]{objetoNinja,objetoAnillo,objetoEspada} );
 		Gdx.input.setInputProcessor(teclado);
-		////////////////////////////////////////////////////////////COLISION////////////////////////////////////////////////
-
 	}
 
 	@Override
@@ -127,11 +111,6 @@ public class SlakerSimulator extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-		if(vago.getDireccion() == 'd'){
-			vago.getCuerpo().setLinearVelocity(Constantes.fuerzaLanzamientoX,vago.getCuerpo().getLinearVelocity().y);
-		}else if( vago.getDireccion() == 'i'){
-			vago.getCuerpo().setLinearVelocity(Constantes.fuerzaLanzamientoX*-1,vago.getCuerpo().getLinearVelocity().y);
-		}
 		vago.seguir(camara);
 		renderer.setView(camara);
 		renderer.render();
