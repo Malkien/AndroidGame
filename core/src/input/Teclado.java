@@ -22,6 +22,7 @@ public class Teclado implements InputProcessor {
     private Vago actor;
     private Objeto[] objetos;
 
+
     public Teclado(Vago j, Objeto[] objetos){
         this.actor=j;
         this.objetos = objetos;
@@ -60,31 +61,50 @@ public class Teclado implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(screenY<Gdx.graphics.getHeight()/3) {
-            actor.getCuerpo().applyForceToCenter(0, 850, true);
+            //actor.getCuerpo().setLinearVelocity(0f,Constantes.fuerzaSalto);
+            if(!actor.getSaltando()){
+                actor.getCuerpo().applyForceToCenter(0, Constantes.fuerzaSalto, true);
+            }
         }else if(screenX>Gdx.graphics.getWidth()/2){
-            actor.getCuerpo().applyForceToCenter(Constantes.fuerzaLanzamientoX,Constantes.fuerzaLanzamientoY,true);
+            actor.getCuerpo().setLinearVelocity(Constantes.fuerzaLanzamientoX,actor.getCuerpo().getLinearVelocity().y);
+            actor.setDireccion('d');
+            //actor.getCuerpo().applyForceToCenter(Constantes.fuerzaLanzamientoX,actor.getCuerpo().getLinearVelocity().y,true);
         }else{
-            actor.getCuerpo().applyForceToCenter(Constantes.fuerzaLanzamientoX*-1,Constantes.fuerzaLanzamientoY,true);
+            actor.getCuerpo().setLinearVelocity(Constantes.fuerzaLanzamientoX*-1,actor.getCuerpo().getLinearVelocity().y);
+            actor.setDireccion('i');
+            //actor.getCuerpo().applyForceToCenter(Constantes.fuerzaLanzamientoX*-1,actor.getCuerpo().getLinearVelocity().y,true);
         }
 
         checkCollision(actor, objetos);
+
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if(screenY>Gdx.graphics.getHeight()/3) {
-            actor.getCuerpo().setLinearVelocity(1f,0);
+            if(screenX>Gdx.graphics.getWidth()/2){
+                actor.getCuerpo().setLinearVelocity(1f,actor.getCuerpo().getLinearVelocity().y);
+            }else{
+                actor.getCuerpo().setLinearVelocity(-1f,actor.getCuerpo().getLinearVelocity().y);
+            }
+
         }
 
 
         checkCollision(actor, objetos);
+        actor.setDireccion('p');
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         return false;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
     }
 
     @Override
@@ -96,6 +116,7 @@ public class Teclado implements InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
 
     public static void checkCollision(Vago principal, Objeto objeto) {
         if(Intersector.overlaps(principal.getSprite().getBoundingRectangle(), objeto.getSprite().getBoundingRectangle())){
