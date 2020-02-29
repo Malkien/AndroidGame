@@ -2,11 +2,13 @@ package slayer.simulator.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -78,7 +80,13 @@ public class SlakerSimulator extends ApplicationAdapter {
 		batch=new SpriteBatch();
 		/////////////////////////////////////
 		batchTexto = new SpriteBatch();
-		textoPantalla = new BitmapFont();
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("letra/letra.TTF"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 100;
+		parameter.borderColor=new Color(0.1f,0.1f,0.1f,1);
+		parameter.borderWidth=3f;
+		parameter.incremental=true;
+		textoPantalla = generator.generateFont(parameter);
 		///////////////////////////////////
 		baseDeDatos.completar("");
 		////////////////////////////////
@@ -145,18 +153,24 @@ public class SlakerSimulator extends ApplicationAdapter {
 		renderer.setView(camara);
 		renderer.render();
 		batch.setProjectionMatrix(camara.combined);
+
+
+
 		batch.begin();
+
+
+
 		vago.draw(batch,0);
 		objetoNinja.draw(batch,0);
 		objetoEspada.draw(batch,0);
 		objetoAnillo.draw(batch,0);
 
-		batchTexto.begin();
-		textoPantalla.draw(batch,"PRUEBAAAAAAA",100,Gdx.graphics.getHeight()/2,Gdx.graphics.getWidth(),1,false);
-		batchTexto.end();
+
 
 		batch.end();
-
+		batchTexto.begin();
+		textoPantalla.draw(batchTexto,"PRUEBAAAAAAA",70,Gdx.graphics.getHeight()/1.5f,Gdx.graphics.getWidth(),1,false);
+		batchTexto.end();
 		camara.update();
 		debugRenderer.render(world, camara.combined);
 	}
