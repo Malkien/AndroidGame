@@ -5,16 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.badlogic.gdx.math.Interpolation;
-
 import java.util.ArrayList;
 
+import Clases.Logro;
 import basededatos.BaseDeDatos;
 
 import static basedatos.BDOpenHelper.DATO_COMPLETADO;
 import static basedatos.BDOpenHelper.DATO_NOMBRE;
 import static basedatos.BDOpenHelper.NOMBRE_BBDD;
-
 public class BaseDeDatosAndroid implements BaseDeDatos {
     private BDOpenHelper openHelper;
 
@@ -38,20 +36,20 @@ public class BaseDeDatosAndroid implements BaseDeDatos {
         }
     }
 
-    private void cargarLogros(){
+    private ArrayList<Logro> cargarLogros(){
         SQLiteDatabase db=openHelper.getWritableDatabase();
-        ArrayList<String> nombres = new ArrayList<String>(){{
-            add("Envidia de Indiana Jones");
-            add("Vago Verdadero");
-            add("Ninja Cumpliendo su Cometido");
-            add("Gran Dominador de Mal");
-        }};
-
-        for(String nombre:nombres){
-            ContentValues valores = new ContentValues();
-            valores.put(DATO_NOMBRE,nombre);
-            db.insert(NOMBRE_BBDD,null,valores);
+        ArrayList<Logro> logros = new ArrayList<Logro>();
+        Cursor c = db.rawQuery("SELECT * FROM "+NOMBRE_BBDD,null);
+        c.moveToFirst();
+        String nombre = c.getString(0);
+        int completado = c.getInt(1);
+        if(c.getInt(1) == 0 ){ logros.add(new Logro(nombre,true)); }else{ logros.add(new Logro(nombre,false)); };
+        while (c.moveToNext()){
+            nombre = c.getString(0);
+            completado = c.getInt(1);
+            if(c.getInt(1) == 0 ){ logros.add(new Logro(nombre,true)); }else{ logros.add(new Logro(nombre,false)); };
         }
+        return logros;
     }
     @Override
     public void guardar(String nombre) {
