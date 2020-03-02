@@ -21,6 +21,18 @@ public class BDOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table "+NOMBRE_BBDD+"("+DATO_NOMBRE+" text not null primary key, "+DATO_COMPLETADO+" boolean default 0)");
 
+        ArrayList<String> nombres = new ArrayList<String>(){{
+            add("Envidia de Indiana Jones");
+            add("Vago Verdadero");
+            add("Ninja Cumpliendo su Cometido");
+            add("Gran Dominador de Mal");
+        }};
+
+        for(String nombre:nombres){
+            ContentValues valores = new ContentValues();
+            valores.put(DATO_NOMBRE,nombre);
+            db.insert(NOMBRE_BBDD,null,valores);
+        }
     }
 
     @Override
