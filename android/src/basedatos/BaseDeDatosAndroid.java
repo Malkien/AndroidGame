@@ -36,7 +36,7 @@ public class BaseDeDatosAndroid implements BaseDeDatos {
         }
     }
 
-    private ArrayList<Logro> cargarLogros(){
+    public ArrayList<Logro> cargarLogros(){
         SQLiteDatabase db=openHelper.getWritableDatabase();
         ArrayList<Logro> logros = new ArrayList<Logro>();
         Cursor c = db.rawQuery("SELECT * FROM "+NOMBRE_BBDD,null);

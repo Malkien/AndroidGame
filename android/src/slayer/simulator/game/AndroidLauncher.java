@@ -15,5 +15,6 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new SlakerSimulator(new BaseDeDatosAndroid(this),true), config);
 
+
 	}
 }
