@@ -26,6 +26,7 @@ public class BDOpenHelper extends SQLiteOpenHelper {
             add("Vago Verdadero");
             add("Ninja Cumpliendo su Cometido");
             add("Gran Dominador de Mal");
+            add("Estaba viendo el lago y me entro sueño...");
         }};
 
         for(String nombre:nombres){

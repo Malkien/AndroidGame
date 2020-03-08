@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import Clases.Logro;
@@ -15,26 +17,14 @@ import static basedatos.BDOpenHelper.DATO_NOMBRE;
 import static basedatos.BDOpenHelper.NOMBRE_BBDD;
 public class BaseDeDatosAndroid implements BaseDeDatos {
     private BDOpenHelper openHelper;
+    private Context context;
 
     public BaseDeDatosAndroid(Context c){
+        this.context = c;
         openHelper=new BDOpenHelper(c,1);
         cargarLogros();
     }
 
-    @Override
-    public int cargar() {
-        SQLiteDatabase db=openHelper.getWritableDatabase();
-        Cursor c=db.query("polloPuntos",
-                null,null,null,
-                null,null,null);
-        if(c.moveToFirst()){//False si no hay ninguna fila, true si hay una
-            //Caso en que ya haya una fila
-            return c.getInt(c.getColumnIndex("puntos"));
-        }else{
-            //Si no hay puntuaciones guardadas, empiezo desde 0 puntos
-            return 0;
-        }
-    }
 
     public ArrayList<Logro> cargarLogros(){
         SQLiteDatabase db=openHelper.getWritableDatabase();
@@ -56,11 +46,12 @@ public class BaseDeDatosAndroid implements BaseDeDatos {
         SQLiteDatabase db=openHelper.getWritableDatabase();
         Cursor c = db.rawQuery("SELECT "+DATO_COMPLETADO+" FROM "+NOMBRE_BBDD+" WHERE "+DATO_NOMBRE+"='"+nombre+"'",null);
         c.moveToFirst();
-        if(c.getInt(1) == 0){
+        if(c.getInt(0) == 0){
             ContentValues cv = new ContentValues();
-            cv.put("",1);
-            db.update(NOMBRE_BBDD,cv,DATO_NOMBRE+"="+nombre,null);
+            cv.put(DATO_COMPLETADO,1);
+            db.update(NOMBRE_BBDD,cv,DATO_NOMBRE+"=?",new String[]{nombre});
         }
+
         c.close();
         db.close();
     }

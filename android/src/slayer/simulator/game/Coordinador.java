@@ -3,16 +3,20 @@ package slayer.simulator.game;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 import basedatos.BaseDeDatosAndroid;
+import servicios.InterfazDialogo;
 
-public class Coordinador  extends AppCompatActivity {
+public class Coordinador  extends AppCompatActivity implements InterfazDialogo.NoticeDialogListener {
     private FragmentTransaction transaction;
     private Fragment jugar;
     private Fragment logros;
@@ -44,5 +48,22 @@ public class Coordinador  extends AppCompatActivity {
 
     public void irLogros(View view) {
         cambiarFragment(logros);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogFragment dialog = new InterfazDialogo();
+        dialog.show(getSupportFragmentManager(), "Dialogo");
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Toast.makeText(this,"Ya decia yo",Toast.LENGTH_LONG).show();
     }
 }

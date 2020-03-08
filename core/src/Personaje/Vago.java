@@ -25,21 +25,27 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import basededatos.BaseDeDatos;
+
 public class Vago {
     protected Sprite sprite;
     private World mundo;
+    private BaseDeDatos baseDeDatos;
     private BodyDef propiedadesCuerpo;
     private Body cuerpo;
     private FixtureDef propiedadesFisicasCuerpo;
     private HashSet<String> inventario;
     private char direccion;
     private boolean saltando;
+    private String titulo;
 
 
-    public Vago(World m, final ArrayList<Body> suelos){
+    public Vago(World m, final ArrayList<Body> suelos, final Body lagoAgua, BaseDeDatos bd){
         direccion = 'p';
+        baseDeDatos = bd;
         inventario = new HashSet<String>();
         mundo=m;
+        titulo = "Vago";
         sprite=new Sprite(new Texture("gothic/PNG/sprites/bearded-idle/bearded-idle-1.png"));
         float anchuraSprite=1.5f; //Anchura y altura se expresan ahora en metros
         float alturaSprite=1.5f;//Anchura y altura se expresan ahora en metros
@@ -68,10 +74,13 @@ public class Vago {
                 System.out.println("Vuelo a estar en el suelo");
                 Body a=contact.getFixtureA().getBody();
                 Body b=contact.getFixtureB().getBody();
-                // Check to see if the collision is between the second sprite and the bottom of the screen
-                // If so apply a random amount of upward force to both objects... just because
+                // Mira si colisionan los objetos, y si ha colision, puedes saltar
                 if( suelos.contains(a) && b == cuerpo){
                     saltando = false;
+                    if(a == lagoAgua && !buscarInventario("anillo")){
+                        baseDeDatos.guardar("Estaba viendo el lago y me entro sueño...");
+                        Gdx.app.exit();
+                    }
                 }else if(suelos.contains(b) && a == cuerpo){
                     saltando = false;
                 }
@@ -111,6 +120,17 @@ public class Vago {
         return this.cuerpo.getPosition().x;
     }
 
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public BaseDeDatos getBaseDeDatos() {
+        return baseDeDatos;
+    }
 
     public float getY(){
         return this.cuerpo.getPosition().y;

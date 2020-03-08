@@ -54,17 +54,20 @@ public class SlakerSimulator extends ApplicationAdapter {
 	private Objeto objetoNinja;
 	private Objeto objetoEspada;
 	private Objeto objetoAnillo;
+	private Objeto puertaDungeon;
 	private Teclado teclado;
 	private Box2DDebugRenderer debugRenderer;
 	private SpriteBatch batch;
 	private OrthographicCamera camara;
 	private Body paredFinal;
-	BaseDeDatos baseDeDatos;
+	private BaseDeDatos baseDeDatos;
 	private boolean esAndroid;
 	private Body lagoAgua;
 	private ArrayList<Body> suelos;
 	private SpriteBatch batchTexto;
 	private BitmapFont textoPantalla;
+	private float[] reposo = new float[2];
+	private int reposoContador;
 
 	public SlakerSimulator(BaseDeDatos bd, boolean android){
 		baseDeDatos=bd;
@@ -121,11 +124,16 @@ public class SlakerSimulator extends ApplicationAdapter {
 		lagoAgua.createFixture(lagoPoligono,0.0f);
 		lagoPoligono.dispose();
 		suelos.add(lagoAgua);
+		/////////////////////////////////////////////////////////////////////////
+		vago=new Vago(world, suelos, lagoAgua, baseDeDatos);
+		reposo = new float[]{vago.getX(), vago.getY()};
+		reposoContador = 0;
+		objetoNinja = new Objeto(world,new Texture("espada.png"),"espada", 1,27.5f);
+		objetoEspada = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"botasNinja", 80,25f);
+		objetoAnillo = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"anillo", 40,37f);
+		puertaDungeon = new Objeto(world,new Texture("door.png"),"puertaDungeon",41,37f);
 
-		vago=new Vago(world, suelos);
-		objetoNinja = new Objeto(world,new Texture("espada.png"),"ninja", 1,27.5f);
-		objetoEspada = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"espada", 5,27.5f);
-		objetoAnillo = new Objeto(world,new Texture("jungla/sprites/creatures/spr_ape_yeti.png"),"anillo", 35,36.5f);
+		//////////////////////////////////////////////////////////////////////////
 
 		camara=new OrthographicCamera(10,10);
 		this.debugRenderer=new Box2DDebugRenderer();
@@ -133,9 +141,9 @@ public class SlakerSimulator extends ApplicationAdapter {
 		camara.position.x = vago.getX();
 		camara.position.y = vago.getY();
 
-		teclado=new Teclado(vago, new Objeto[]{objetoNinja,objetoAnillo,objetoEspada} );
+		teclado=new Teclado(vago, new Objeto[]{objetoNinja,objetoAnillo,objetoEspada,puertaDungeon});
 		Gdx.input.setInputProcessor(teclado);
-		////////////////////////////////////////////////////////////COLISION////////////////////////////////////////////////
+
 
 	}
 
@@ -154,7 +162,18 @@ public class SlakerSimulator extends ApplicationAdapter {
 		renderer.render();
 		batch.setProjectionMatrix(camara.combined);
 
+		if(reposo[0] == vago.getX() && vago.getY() == reposo[1]){
 
+			if(reposoContador>1000){
+				baseDeDatos.guardar("Vago Verdadero");
+				vago.setTitulo("Vago Verdadero");
+			}else{
+				reposoContador++;
+			}
+		}else{
+			reposo = new float[]{vago.getX(), vago.getY()};
+			reposoContador=0;
+		}
 
 		batch.begin();
 
@@ -164,12 +183,13 @@ public class SlakerSimulator extends ApplicationAdapter {
 		objetoNinja.draw(batch,0);
 		objetoEspada.draw(batch,0);
 		objetoAnillo.draw(batch,0);
+		puertaDungeon.draw(batch,0);
 
 
 
 		batch.end();
 		batchTexto.begin();
-		textoPantalla.draw(batchTexto,"PRUEBAAAAAAA",70,Gdx.graphics.getHeight()/1.5f,Gdx.graphics.getWidth(),1,false);
+		textoPantalla.draw(batchTexto,"Titulo: "+vago.getTitulo(),70,Gdx.graphics.getHeight()/1.2f,Gdx.graphics.getWidth(),1,false);
 		batchTexto.end();
 		camara.update();
 		debugRenderer.render(world, camara.combined);

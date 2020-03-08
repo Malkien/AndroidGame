@@ -2,5 +2,7 @@
 <resources>
 
     <string name="app_name">SlakerSimulador</string>
-
+    <string name="seguro">¿Seguro que quiere salir?</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
 </resources>

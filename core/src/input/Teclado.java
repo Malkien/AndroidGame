@@ -12,6 +12,7 @@ import javax.jws.Oneway;
 
 import Personaje.Objeto;
 import Personaje.Vago;
+import basededatos.BaseDeDatos;
 import constantes.Constantes;
 
 /**
@@ -118,15 +119,23 @@ public class Teclado implements InputProcessor {
     }
 
 
-    public static void checkCollision(Vago principal, Objeto objeto) {
+    public void checkCollision(Vago principal, Objeto objeto) {
         if(Intersector.overlaps(principal.getSprite().getBoundingRectangle(), objeto.getSprite().getBoundingRectangle())){
-            principal.addObjeto(objeto.getPalabra());
-            objeto.setMostrar(false);
+            if(objeto.getPalabra().equalsIgnoreCase("puertaDungeon") && principal.buscarInventario("espada")){
+                principal.getBaseDeDatos().guardar("Envidia de Indiana Jones");
+                principal.setTitulo("Dungeon Hunter");
+            }else if(objeto.getPalabra().equalsIgnoreCase("puertaDungeon") && !principal.buscarInventario("espada")){
+
+                Gdx.app.exit();
+            }else{
+                principal.addObjeto(objeto.getPalabra());
+                objeto.setMostrar(false);
+            }
         }
 
     }
 
-    public static void checkCollision(Vago principal, Objeto[] objetos) {
+    public void checkCollision(Vago principal, Objeto[] objetos) {
         for(Objeto spriteGroup : objetos) {
             checkCollision(principal, spriteGroup);
         }
