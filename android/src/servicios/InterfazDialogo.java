@@ -10,7 +10,13 @@ import androidx.fragment.app.DialogFragment;
 
 import slayer.simulator.game.R;
 
+/**
+ * Clase de Dialogo que extiende de DialogFragment
+ */
 public class InterfazDialogo extends DialogFragment {
+    /**
+     * Interfaz para manejar la respuesta del usuario
+     */
     public interface NoticeDialogListener {
         public void onDialogPositiveClick(DialogFragment dialog);
         public void onDialogNegativeClick(DialogFragment dialog);
@@ -20,6 +26,11 @@ public class InterfazDialogo extends DialogFragment {
     NoticeDialogListener listener;
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
+
+    /**
+     * Sobreescribe el onAttach con la interfaz que maneja la salida del usuario
+     * @param context El contexto
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -33,6 +44,11 @@ public class InterfazDialogo extends DialogFragment {
         }
     }
 
+    /**
+     * Sobreescribe el onCreateDialog Para personalizar el dialogo
+     * @param savedInstanceState El savedInstanceState
+     * @return Devuelve el dialogo creado
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Build the dialog and set up the button click handlers

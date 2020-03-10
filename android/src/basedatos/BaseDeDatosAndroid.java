@@ -15,17 +15,28 @@ import basededatos.BaseDeDatos;
 import static basedatos.BDOpenHelper.DATO_COMPLETADO;
 import static basedatos.BDOpenHelper.DATO_NOMBRE;
 import static basedatos.BDOpenHelper.NOMBRE_BBDD;
-public class BaseDeDatosAndroid implements BaseDeDatos {
-    private BDOpenHelper openHelper;
-    private Context context;
 
+/**
+ * La clase que administra la bbdd en el juego
+ */
+public class BaseDeDatosAndroid implements BaseDeDatos {
+    private BDOpenHelper openHelper;//EL Open Helper
+    private Context context;//El contexto
+
+    /**
+     * El constructor de la clase
+     * @param c El contexto
+     */
     public BaseDeDatosAndroid(Context c){
         this.context = c;
         openHelper=new BDOpenHelper(c,1);
         cargarLogros();
     }
 
-
+    /**
+     * Funcion que carga todos los logros de la bbdd
+     * @return Devuelve un arrayList de Logro con todos los logros de la bbdd
+     */
     public ArrayList<Logro> cargarLogros(){
         SQLiteDatabase db=openHelper.getWritableDatabase();
         ArrayList<Logro> logros = new ArrayList<Logro>();
@@ -41,6 +52,11 @@ public class BaseDeDatosAndroid implements BaseDeDatos {
         }
         return logros;
     }
+
+    /**
+     * Modifica la fila que tiene el nombre que le pasamos, Columna completado a true
+     * @param nombre El nombre de la fila que vamos a modificar
+     */
     @Override
     public void guardar(String nombre) {
         SQLiteDatabase db=openHelper.getWritableDatabase();
@@ -56,6 +72,11 @@ public class BaseDeDatosAndroid implements BaseDeDatos {
         db.close();
     }
 
+    /**
+     * Funcion sin uso
+     * Funcion que te devuelve el porcentaje de cuantos logros hay completados
+     * @param completar No se usa
+     */
     @Override
     public void completar(String completar) {
         SQLiteDatabase db=openHelper.getWritableDatabase();

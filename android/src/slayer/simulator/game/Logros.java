@@ -19,13 +19,28 @@ import java.util.ArrayList;
 import Clases.Logro;
 import basedatos.BaseDeDatosAndroid;
 
+/**
+ * Fragmento Logros
+ */
 public class Logros extends Fragment {
-    private ListView lista;
-    private BaseDeDatosAndroid base;
-    private Context context;
+    private ListView lista;// EL listView
+    private BaseDeDatosAndroid base; // La bbdd
+    private Context context;//El contexto
 
+    /**
+     * El constructor del fragmento
+     * @param context El contexto
+     * @param base La base de datos
+     */
     public Logros(Context context, BaseDeDatosAndroid base){ this.base = base;this.context = context;}
 
+    /**
+     * Sobreescrite el oncreateView
+     * @param inflater El inflater
+     * @param container El container
+     * @param savedInstanceState El savedInstanceState
+     * @return Devuelve el view
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

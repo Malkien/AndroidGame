@@ -11,7 +11,14 @@ import basedatos.BaseDeDatosAndroid;
 import servicios.Musicote;
 import slayer.simulator.game.SlakerSimulator;
 
+/**
+ * Clase que inicia el juego
+ */
 public class AndroidLauncher extends AndroidApplication {
+	/**
+	 * Sobreescibe el onCreate donde inicia el juego y el servicio de la musica
+	 * @param savedInstanceState El savedInstanceState
+	 */
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,6 +28,9 @@ public class AndroidLauncher extends AndroidApplication {
 
 	}
 
+	/**
+	 * Sobreescibe el onDestroy para que pare el servicio de musica y saque un Toast por pantalla
+	 */
 	@Override
 	protected void onDestroy() {
 		Toast.makeText(this,"Has muerto",Toast.LENGTH_LONG).show();
@@ -28,6 +38,9 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onDestroy();
 	}
 
+	/**
+	 * Sobreescribe el onBackPressed Para que pare el servicio
+	 */
 	@Override
 	public void onBackPressed() {
 		stopService(new Intent(this, Musicote.class));
