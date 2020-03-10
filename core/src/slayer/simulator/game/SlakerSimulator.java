@@ -45,30 +45,104 @@ import basededatos.BaseDeDatos;
 import constantes.Constantes;
 import input.Teclado;
 
+/**
+ * La clase principal del juego
+ */
 public class SlakerSimulator extends ApplicationAdapter {
+	/**
+	 * El mundo
+	 */
 	private World world;
+	/**
+	 * El TilepMap el mapa
+	 */
 	private TiledMap mapa;
+	/**
+	 * Los pixeles por cuadro que tiele cada cuadro del mapa
+	 */
 	private static final float pixelsPorCuadro=32f;
+	/**
+	 * El renderer
+	 */
 	private OrthogonalTiledMapRenderer renderer;
+	/**
+	 * El actor vago
+	 */
 	private Vago vago;
+	/**
+	 * El objeto ninja
+	 */
 	private Objeto objetoNinja;
+	/**
+	 * El objeto espada
+	 */
 	private Objeto objetoEspada;
+	/**
+	 * El objeto anillo
+	 */
 	private Objeto objetoAnillo;
+	/**
+	 * La puerta de la dungeon
+	 */
 	private Objeto puertaDungeon;
+	/**
+	 * El teclado
+	 */
 	private Teclado teclado;
+	/**
+	 * El debugRenderer
+	 */
 	private Box2DDebugRenderer debugRenderer;
+	/**
+	 * El batch
+	 */
 	private SpriteBatch batch;
+	/**
+	 * La orthograficcamara la camara
+	 */
 	private OrthographicCamera camara;
+	/**
+	 * Body de la pared final
+	 */
 	private Body paredFinal;
+	/**
+	 * La base de datos
+	 */
 	private BaseDeDatos baseDeDatos;
+	/**
+	 * Si esta ejecutandose en android
+	 */
 	private boolean esAndroid;
+	/**
+	 * El body de lago de agua
+	 */
 	private Body lagoAgua;
+	/**
+	 * Los objetos que actuan como superficies en el juego
+	 */
 	private ArrayList<Body> suelos;
+	/**
+	 * El batchtexto para escribir texto en el juego
+	 */
 	private SpriteBatch batchTexto;
+	/**
+	 * El texto en pantalla fondo
+	 */
 	private BitmapFont textoPantalla;
+	/**
+	 * Reposo guarda la posicion anterior del vago
+	 */
 	private float[] reposo = new float[2];
+	/**
+	 * El contador de reposo
+	 */
 	private int reposoContador;
 
+	/**
+	 * El constructor de la clase
+	 * @param bd la base de datos
+	 * @param android si es android
+	 */
 	public SlakerSimulator(BaseDeDatos bd, boolean android){
 		baseDeDatos=bd;
 
@@ -77,7 +151,9 @@ public class SlakerSimulator extends ApplicationAdapter {
 	}
 
 
-
+	/**
+	 * Sobreescribe la funcion create del juego
+	 */
 	@Override
 	public void create () {
 		batch=new SpriteBatch();
@@ -147,6 +223,9 @@ public class SlakerSimulator extends ApplicationAdapter {
 
 	}
 
+	/**
+	 * Sobreescribe la funcion render del juego
+	 */
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -195,6 +274,9 @@ public class SlakerSimulator extends ApplicationAdapter {
 		debugRenderer.render(world, camara.combined);
 	}
 
+	/**
+	 * Sobreecribe la funcion dispose del juego
+	 */
 	@Override
 	public void dispose () {
 		world.dispose();

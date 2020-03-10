@@ -11,9 +11,17 @@ import java.util.ArrayList;
  * Clase de la bbdd SQLite
  */
 public class BDOpenHelper extends SQLiteOpenHelper {
-
+    /**
+     * Nombre de la bbdd
+     */
     public static final String NOMBRE_BBDD = "logros";//Nombre de la bbdd
+    /**
+     * Nombre de la columna 0
+     */
     public static final String DATO_NOMBRE = "nombre";//Nombre de la columna 0
+    /**
+     * Nombre de la columna 1
+     */
     public static final String DATO_COMPLETADO = "completado";//Nombre de la columna 1
 
     /**

@@ -20,7 +20,13 @@ import static basedatos.BDOpenHelper.NOMBRE_BBDD;
  * La clase que administra la bbdd en el juego
  */
 public class BaseDeDatosAndroid implements BaseDeDatos {
+    /**
+     * El openHElper
+     */
     private BDOpenHelper openHelper;//EL Open Helper
+    /**
+     * El contexto
+     */
     private Context context;//El contexto
 
     /**

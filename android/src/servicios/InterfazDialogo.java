@@ -18,7 +18,16 @@ public class InterfazDialogo extends DialogFragment {
      * Interfaz para manejar la respuesta del usuario
      */
     public interface NoticeDialogListener {
+        /**
+         * Respuesta positiva manejador
+         * @param dialog el dialogo
+         */
         public void onDialogPositiveClick(DialogFragment dialog);
+
+        /**
+         * Respuesta negativa manejador
+         * @param dialog el dialogo
+         */
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 

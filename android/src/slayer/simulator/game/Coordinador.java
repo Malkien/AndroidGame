@@ -20,9 +20,21 @@ import servicios.InterfazDialogo;
  * Clase principal del app
  */
 public class Coordinador  extends AppCompatActivity implements InterfazDialogo.NoticeDialogListener {
+    /**
+     * La transaccion
+     */
     private FragmentTransaction transaction;// transaction
+    /**
+     * El fragmento jugar
+     */
     private Fragment jugar;//El fragmento jugar
+    /**
+     * El fragmento Logros
+     */
     private Fragment logros;//El fragmento Logros
+    /**
+     * La base de datos
+     */
     private BaseDeDatosAndroid base;//La base de datos
 
     /**

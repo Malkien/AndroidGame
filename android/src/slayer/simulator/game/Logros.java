@@ -23,8 +23,17 @@ import basedatos.BaseDeDatosAndroid;
  * Fragmento Logros
  */
 public class Logros extends Fragment {
+    /**
+     * El listView
+     */
     private ListView lista;// EL listView
+    /**
+     * La base de datos
+     */
     private BaseDeDatosAndroid base; // La bbdd
+    /**
+     * El contexto
+     */
     private Context context;//El contexto
 
     /**

@@ -4,7 +4,13 @@ package Clases;
  * Clase Logro
  */
 public class Logro {
+    /**
+     * El nombre del logro
+     */
     private String nombre;//El nombre del logro
+    /**
+     * Si esta completado el logro o no
+     */
     private Boolean completado;//Si esta completado el logro o no
 
     /**

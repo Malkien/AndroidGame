@@ -14,6 +14,9 @@ import slayer.simulator.game.R;
  * Servicio que inicia la musica
  */
 public class Musicote extends Service {
+    /**
+     * El reproductor de musica
+     */
     MediaPlayer musicPlayer;//El reproductor de musica
 
     /**

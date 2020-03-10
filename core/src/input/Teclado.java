@@ -16,20 +16,33 @@ import basededatos.BaseDeDatos;
 import constantes.Constantes;
 
 /**
- * Created by Miguel on 17/02/2019.
+ * Clase Teclado
  */
-
 public class Teclado implements InputProcessor {
-    private Vago actor;
-    private Objeto[] objetos;
+    /**
+     * El bago
+     */
+    private Vago actor;//El actor
+    /**
+     * Los objetos
+     */
+    private Objeto[] objetos;//Los objetos
 
-
+    /**
+     * Constructor de Teclado
+     * @param j El Vago
+     * @param objetos Los objetos
+     */
     public Teclado(Vago j, Objeto[] objetos){
         this.actor=j;
         this.objetos = objetos;
     }
 
-
+    /**
+     * Sobreescribir metodos de teclado
+     * @param keycode La tecla
+     * @return
+     */
     @Override
     public boolean keyDown(int keycode) {
         Gdx.app.log("eventoDown","Input "+keycode);
@@ -49,6 +62,11 @@ public class Teclado implements InputProcessor {
         return true;
     }
 
+    /**
+     * Sobreescribir metodos de teclado
+     * @param keycode La tecla
+     * @return
+     */
     @Override
     public boolean keyUp(int keycode) {
         return false;
@@ -59,6 +77,14 @@ public class Teclado implements InputProcessor {
         return false;
     }
 
+    /**
+     * Sobreescribir la funcion de pantalla tactil al pulsar
+     * @param screenX Posicion x
+     * @param screenY Posicion y
+     * @param pointer Pointer
+     * @param button Boton
+     * @return
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(screenY<Gdx.graphics.getHeight()/3) {
@@ -81,6 +107,14 @@ public class Teclado implements InputProcessor {
         return false;
     }
 
+    /**
+     * Sobreescribir la funcion de pantalla tactil al soltar
+     * @param screenX Posicion x
+     * @param screenY Posicion y
+     * @param pointer Pointer
+     * @param button Boton
+     * @return
+     */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if(screenY>Gdx.graphics.getHeight()/3) {
@@ -118,7 +152,11 @@ public class Teclado implements InputProcessor {
         return false;
     }
 
-
+    /**
+     * Funcion para ver si un objeto colisiona con el vago
+     * @param principal el vago
+     * @param objeto el objeto
+     */
     public void checkCollision(Vago principal, Objeto objeto) {
         if(Intersector.overlaps(principal.getSprite().getBoundingRectangle(), objeto.getSprite().getBoundingRectangle())){
             if(objeto.getPalabra().equalsIgnoreCase("puertaDungeon") && principal.buscarInventario("espada")){
@@ -135,6 +173,11 @@ public class Teclado implements InputProcessor {
 
     }
 
+    /**
+     * Funcion que itera en cada objeto
+     * @param principal vago
+     * @param objetos objeto
+     */
     public void checkCollision(Vago principal, Objeto[] objetos) {
         for(Objeto spriteGroup : objetos) {
             checkCollision(principal, spriteGroup);
